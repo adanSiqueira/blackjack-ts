@@ -1,0 +1,13 @@
+• Dependencies used:
+Express → HTTP API
+http (Node core) → needed for WebSockets
+ws or socket.io → WebSockets
+dotenv → environment variables
+
+• Environment setting:
+npm init -y
+npm install express cors dotenv
+npm install ws
+npm install -D @types/node @types/express ts-node-dev
+npm install -D @types/cors
+npm install --save-dev @types/dotenv
