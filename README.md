@@ -8,7 +8,7 @@
   <img src="https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white" />
 </p>
 
-This project is a **full-stack Blackjack game** built entirely with **TypeScript**, designed both as a playable application and as a **learning project** focused on clean architecture, domain modeling, and modern web development.
+This project is a **full-stack Blackjack game** built entirely with **TypeScript**, designed as a playable application focused on clean architecture, domain modeling, and modern web development.
 
 The application is split into **three main layers**:
 
