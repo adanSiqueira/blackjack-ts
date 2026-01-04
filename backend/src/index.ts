@@ -15,8 +15,7 @@ import cors from 'cors';
 import http from 'http';
 import dotenv from 'dotenv';
 
-import { registerGameRoutes } from './api/routes/game.routes';
-import { registerHealthRoutes } from './api/routes/health.routes';
+import app from './app'
 import { initGameSocket } from './websocket/socket.server';
 
 /**
@@ -39,39 +38,6 @@ dotenv.config();
  * This also validates that environment variable resolution is working.
  */
 const PORT = process.env.PORT || 3001;
-
-/**
- * Express application instance.
- *
- * Purpose:
- * - Acts as the central HTTP request handler
- * - Receives middleware and route registrations
- */
-const app = express();
-
-/**
- * Global middleware configuration.
- *
- * cors():
- * - Enables Cross-Origin Resource Sharing
- * - Allows the backend to be consumed by browsers and external clients
- *
- * express.json():
- * - Parses incoming JSON payloads
- * - Makes request bodies available under `req.body`
- */
-app.use(cors());
-app.use(express.json());
-
-/**
- * REST route registration.
- *
- * Routes are registered via functions to keep this file clean
- * and to ensure a clear separation between bootstrap logic
- * and HTTP API definitions.
- */
-registerHealthRoutes(app);
-registerGameRoutes(app);
 
 /**
  * HTTP server creation.

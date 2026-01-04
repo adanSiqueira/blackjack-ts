@@ -1,7 +1,13 @@
-import { Express } from 'express';
+import { Router } from 'express';
 
-export function registerHealthRoutes(app: Express) {
-  app.get('/health', (_, res) => {
-    res.json({ status: 'ok' });
+const router = Router();
+
+router.get('/', (_req, res) => {
+  res.status(200).json({
+    status: 'ok',
+    service: 'blackjack-backend',
+    timestamp: new Date().toISOString()
   });
-}
+});
+
+export default router;

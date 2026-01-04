@@ -1,7 +1,14 @@
-import { Express } from 'express';
+import { Router } from 'express';
 
-export function registerGameRoutes(app: Express) {
-  app.post('/game/start', (_, res) => {
-    res.json({ message: 'Game started (stub)' });
+const router = Router();
+
+/**
+ * Temporary placeholder route.
+ */
+router.post('/start', (_req, res) => {
+  res.status(200).json({
+    message: 'Game started (placeholder)'
   });
-}
+});
+
+export default router;
