@@ -12,7 +12,8 @@
   "type": "commonjs",
   "dependencies": {
     "cors": "^2.8.5",
-    "ws": "^8.18.3"
+    "ws": "^8.18.3",
+    "@blackjack/domain": "file:../domain"
   },
   "devDependencies": {
     "@types/cors": "^2.8.19",
