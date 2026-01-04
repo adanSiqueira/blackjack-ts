@@ -7,9 +7,7 @@
  * - Confirms TypeScript + Node.js runtime configuration
  * - Wires REST routes and WebSocket server
  * - Creates and starts the HTTP server
- *
- * This file should remain thin and orchestration-focused.
- * No business logic should live here.
+ * - No business logic in here.
  */
 
 import express from 'express';
