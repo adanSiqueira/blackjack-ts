@@ -1,12 +1,10 @@
-import { Deck } from '../cards/Deck';
-import { Player } from '../players/Player';
-import { Dealer } from '../players/Dealer';
+import { Deck } from '../cards/Deck.js';
+import { Player } from '../players/Player.js';
+import { Dealer } from '../players/Dealer.js';
 export class Game {
-    constructor() {
-        this.deck = new Deck();
-        this.player = new Player(100);
-        this.dealer = new Dealer(0);
-    }
+    deck = new Deck();
+    player = new Player(100);
+    dealer = new Dealer(0);
     start(bet) {
         this.player.hand.add(this.deck.draw());
         this.player.hand.add(this.deck.draw());

@@ -1,6 +1,6 @@
-import { Deck } from '../cards/Deck';
-import { Player } from '../players/Player';
-import { Dealer } from '../players/Dealer';
+import { Deck } from '../cards/Deck.js';
+import { Player } from '../players/Player.js';
+import { Dealer } from '../players/Dealer.js';
 
 export class Game {
   private deck = new Deck();

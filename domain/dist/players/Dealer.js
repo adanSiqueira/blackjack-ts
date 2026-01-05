@@ -1,4 +1,4 @@
-import { Player } from './Player';
+import { Player } from './Player.js';
 export class Dealer extends Player {
     play(deck) {
         console.log(`Dealer's hand: ${this.hand.toString()}. Total: ${this.hand.value}`);

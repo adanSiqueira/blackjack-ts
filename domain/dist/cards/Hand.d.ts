@@ -1,4 +1,4 @@
-import { Card } from './Card';
+import { Card } from './Card.js';
 export declare class Hand {
     private cards;
     add(card: Card): void;

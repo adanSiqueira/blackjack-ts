@@ -1,8 +1,9 @@
-import { Hand } from '../cards/Hand';
+import { Hand } from '../cards/Hand.js';
 export class Player {
+    funds;
+    hand = new Hand();
     constructor(funds) {
         this.funds = funds;
-        this.hand = new Hand();
         this.funds = funds;
     }
     resetHand() {

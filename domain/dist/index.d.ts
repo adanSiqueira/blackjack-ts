@@ -1,7 +1,7 @@
-export { Game } from './game/Game';
-export * from './cards/Card';
-export * from './cards/Deck';
-export * from './cards/Hand';
-export * from './players/Player';
-export * from './players/Dealer';
+export { Game } from './game/Game.js';
+export * from './cards/Card.js';
+export * from './cards/Deck.js';
+export * from './cards/Hand.js';
+export * from './players/Player.js';
+export * from './players/Dealer.js';
 //# sourceMappingURL=index.d.ts.map

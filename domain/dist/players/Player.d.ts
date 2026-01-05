@@ -1,4 +1,4 @@
-import { Hand } from '../cards/Hand';
+import { Hand } from '../cards/Hand.js';
 export declare class Player {
     funds: number;
     hand: Hand;

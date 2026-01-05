@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "ts-node-dev --respawn src/index.ts",
+    "build": "tsc"
   },
   "keywords": [],
   "author": "",
@@ -13,6 +15,8 @@
   "dependencies": {
     "@blackjack/domain": "file:../domain",
     "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
+    "express": "^5.2.1",
     "ws": "^8.18.3"
   },
   "devDependencies": {

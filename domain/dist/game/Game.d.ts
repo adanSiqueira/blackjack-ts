@@ -1,5 +1,5 @@
-import { Player } from '../players/Player';
-import { Dealer } from '../players/Dealer';
+import { Player } from '../players/Player.js';
+import { Dealer } from '../players/Dealer.js';
 export declare class Game {
     private deck;
     player: Player;

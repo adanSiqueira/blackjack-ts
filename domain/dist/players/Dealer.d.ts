@@ -1,5 +1,5 @@
-import { Player } from './Player';
-import { Deck } from '../cards/Deck';
+import { Player } from './Player.js';
+import { Deck } from '../cards/Deck.js';
 export declare class Dealer extends Player {
     play(deck: Deck): void;
 }
