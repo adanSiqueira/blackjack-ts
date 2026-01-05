@@ -11,15 +11,16 @@
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
+    "@blackjack/domain": "file:../domain",
     "cors": "^2.8.5",
-    "ws": "^8.18.3",
-    "@blackjack/domain": "file:../domain"
+    "ws": "^8.18.3"
   },
   "devDependencies": {
     "@types/cors": "^2.8.19",
     "@types/dotenv": "^6.1.1",
     "@types/express": "^5.0.6",
     "@types/node": "^25.0.3",
+    "@types/ws": "^8.18.1",
     "install": "^0.13.0",
     "npm": "^11.7.0",
     "ts-node-dev": "^2.0.0"
