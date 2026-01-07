@@ -9,6 +9,7 @@ export class GameController {
     const game = new Game();
     const gameId = crypto.randomUUID();
 
+    game.start(100); // Starting with a default bet of 100
     games.set(gameId, game);
 
     const dto = mapGameToState(game, gameId);
