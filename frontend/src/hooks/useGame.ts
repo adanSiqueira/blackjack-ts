@@ -27,11 +27,13 @@ export function useGame() {
    * Creates a new game session.
    */
   const createGame = useCallback(async () => {
+    console.log('[useGame] createGame called');
     setLoading(true);
     setError(null);
 
     try {
       const newGame = await apiCreateGame();
+      console.log('[useGame] game received', newGame);
       setGame(newGame);
     } catch (err) {
       console.error(err);

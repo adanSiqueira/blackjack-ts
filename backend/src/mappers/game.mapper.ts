@@ -9,13 +9,14 @@ function mapCard(card: any): CardDTO {
 }
 
 function mapPlayer(player: any, id: string): PlayerStateDTO {
+  const cards = player.hand?.cards ?? [];
   return {
     id,
-    hand: player.hand.cards.map(mapCard),
-    value: player.hand.value,
-    funds: player.funds,
+    hand: cards.map(mapCard),
+    value: player.hand?.value ?? 0,
+    funds: player.funds ?? 0,
     status:
-      player.hand.value > 21
+      (player.hand?.value ?? 0) > 21
         ? 'bust'
         : 'playing',
   };

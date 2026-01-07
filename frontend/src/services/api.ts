@@ -28,7 +28,7 @@ const apiClient = axios.create({
  * Creates a new blackjack game session.
  */
 export async function createGame(): Promise<GameStateDTO> {
-  const response = await apiClient.post<GameStateDTO>('/game');
+  const response = await apiClient.post<GameStateDTO>('/game', {'bet': 10});
   return response.data;
 }
 

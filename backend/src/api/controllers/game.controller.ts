@@ -1,92 +1,47 @@
-import { Request, Response, NextFunction } from 'express';
-import { gameService } from '../../services/game.services';
+import { Request, Response } from 'express';
+import { Game } from '@blackjack/domain';
+import { mapGameToState } from '../../mappers/game.mapper';
 
-/**
- * GameController
- *
- * HTTP adapter layer between clients and the GameService.
- *
- * Responsibilities:
- * - Parse and validate HTTP input
- * - Call application services
- * - Return JSON responses
- * - Forward errors to error middleware
- */
+const games = new Map<string, Game>();
+
 export class GameController {
-  static createGame(req: Request, res: Response, next: NextFunction) {
-    try {
-      const { bet } = req.body;
+  static createGame(req: Request, res: Response) {
+    const game = new Game();
+    const gameId = crypto.randomUUID();
 
-      if (typeof bet !== 'number' || bet <= 0) {
-        return res.status(400).json({ error: 'Invalid bet amount' });
-      }
+    games.set(gameId, game);
 
-      const session = gameService.createGame(bet);
+    const dto = mapGameToState(game, gameId);
 
-      res.status(201).json({
-        gameId: session.id,
-        player: session.game.player.hand.value,
-        dealerCard: session.game.dealer.hand.firstCard.toString(),
-        status: session.status
-      });
-    } catch (err) {
-      next(err);
-    }
+    res.json(dto); // ✅ THIS is what frontend expects
   }
 
-  static getGame(req: Request, res: Response, next: NextFunction) {
-    try {
-      const { id } = req.params;
-
-      const session = gameService.getGame(id);
-
-      res.json({
-        id: session.id,
-        status: session.status,
-        playerHand: session.game.player.hand.toString(),
-        playerValue: session.game.player.hand.value,
-        dealerHand: session.status === 'finished'
-          ? session.game.dealer.hand.toString()
-          : '[hidden]',
-        dealerValue: session.status === 'finished'
-          ? session.game.dealer.hand.value
-          : null
-      });
-    } catch (err) {
-      next(err);
+  static getGame(req: Request, res: Response) {
+    const game = games.get(req.params.id);
+    if (!game) {
+      return res.status(404).json({ error: 'Game not found' });
     }
+
+    res.json(mapGameToState(game, req.params.id));
   }
 
-  static hit(req: Request, res: Response, next: NextFunction) {
-    try {
-      const { id } = req.params;
-
-      const session = gameService.hit(id);
-
-      res.json({
-        status: session.status,
-        playerHand: session.game.player.hand.toString(),
-        playerValue: session.game.player.hand.value
-      });
-    } catch (err) {
-      next(err);
+  static hit(req: Request, res: Response) {
+    const game = games.get(req.params.id);
+    if (!game) {
+      return res.status(404).json({ error: 'Game not found' });
     }
+
+    game.hitPlayer();
+    res.json(mapGameToState(game, req.params.id));
   }
 
-  static stand(req: Request, res: Response, next: NextFunction) {
-    try {
-      const { id } = req.params;
-
-      const session = gameService.stand(id);
-
-      res.json({
-        status: session.status,
-        result: session.game.getResult(),
-        dealerHand: session.game.dealer.hand.toString(),
-        dealerValue: session.game.dealer.hand.value
-      });
-    } catch (err) {
-      next(err);
+  static stand(req: Request, res: Response) {
+    const game = games.get(req.params.id);
+    if (!game) {
+      return res.status(404).json({ error: 'Game not found' });
     }
+
+    game.stand();
+    res.json(mapGameToState(game, req.params.id));
   }
 }

@@ -9,6 +9,11 @@ type TableProps = {
 };
 
 export function Table({ game, onHit, onStand }: TableProps) {
+
+  if (!game.player || !game.dealer) {
+    return <div><p>Loading game...</p></div>;
+  }
+
   return (
     <div>
       <Hand

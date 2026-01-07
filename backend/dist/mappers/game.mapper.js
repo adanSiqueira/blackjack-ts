@@ -8,12 +8,13 @@ function mapCard(card) {
     };
 }
 function mapPlayer(player, id) {
+    const cards = player.hand?.cards ?? [];
     return {
         id,
-        hand: player.hand.cards.map(mapCard),
-        value: player.hand.value,
-        funds: player.funds,
-        status: player.hand.value > 21
+        hand: cards.map(mapCard),
+        value: player.hand?.value ?? 0,
+        funds: player.funds ?? 0,
+        status: (player.hand?.value ?? 0) > 21
             ? 'bust'
             : 'playing',
     };
