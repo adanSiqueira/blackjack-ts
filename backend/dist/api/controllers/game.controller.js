@@ -1,86 +1,40 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.GameController = void 0;
-const game_services_1 = require("../../services/game.services");
-/**
- * GameController
- *
- * HTTP adapter layer between clients and the GameService.
- *
- * Responsibilities:
- * - Parse and validate HTTP input
- * - Call application services
- * - Return JSON responses
- * - Forward errors to error middleware
- */
+const domain_1 = require("@blackjack/domain");
+const game_mapper_1 = require("../../mappers/game.mapper");
+const games = new Map();
 class GameController {
-    static createGame(req, res, next) {
-        try {
-            const { bet } = req.body;
-            if (typeof bet !== 'number' || bet <= 0) {
-                return res.status(400).json({ error: 'Invalid bet amount' });
-            }
-            const session = game_services_1.gameService.createGame(bet);
-            res.status(201).json({
-                gameId: session.id,
-                player: session.game.player.hand.value,
-                dealerCard: session.game.dealer.hand.firstCard.toString(),
-                status: session.status
-            });
-        }
-        catch (err) {
-            next(err);
-        }
+    static createGame(req, res) {
+        const game = new domain_1.Game();
+        const gameId = crypto.randomUUID();
+        game.start(100); // Starting with a default bet of 100
+        games.set(gameId, game);
+        const dto = (0, game_mapper_1.mapGameToState)(game, gameId);
+        res.json(dto); // ✅ THIS is what frontend expects
     }
-    static getGame(req, res, next) {
-        try {
-            const { id } = req.params;
-            const session = game_services_1.gameService.getGame(id);
-            res.json({
-                id: session.id,
-                status: session.status,
-                playerHand: session.game.player.hand.toString(),
-                playerValue: session.game.player.hand.value,
-                dealerHand: session.status === 'finished'
-                    ? session.game.dealer.hand.toString()
-                    : '[hidden]',
-                dealerValue: session.status === 'finished'
-                    ? session.game.dealer.hand.value
-                    : null
-            });
+    static getGame(req, res) {
+        const game = games.get(req.params.id);
+        if (!game) {
+            return res.status(404).json({ error: 'Game not found' });
         }
-        catch (err) {
-            next(err);
-        }
+        res.json((0, game_mapper_1.mapGameToState)(game, req.params.id));
     }
-    static hit(req, res, next) {
-        try {
-            const { id } = req.params;
-            const session = game_services_1.gameService.hit(id);
-            res.json({
-                status: session.status,
-                playerHand: session.game.player.hand.toString(),
-                playerValue: session.game.player.hand.value
-            });
+    static hit(req, res) {
+        const game = games.get(req.params.id);
+        if (!game) {
+            return res.status(404).json({ error: 'Game not found' });
         }
-        catch (err) {
-            next(err);
-        }
+        game.hitPlayer();
+        res.json((0, game_mapper_1.mapGameToState)(game, req.params.id));
     }
-    static stand(req, res, next) {
-        try {
-            const { id } = req.params;
-            const session = game_services_1.gameService.stand(id);
-            res.json({
-                status: session.status,
-                result: session.game.getResult(),
-                dealerHand: session.game.dealer.hand.toString(),
-                dealerValue: session.game.dealer.hand.value
-            });
+    static stand(req, res) {
+        const game = games.get(req.params.id);
+        if (!game) {
+            return res.status(404).json({ error: 'Game not found' });
         }
-        catch (err) {
-            next(err);
-        }
+        game.stand();
+        res.json((0, game_mapper_1.mapGameToState)(game, req.params.id));
     }
 }
 exports.GameController = GameController;
