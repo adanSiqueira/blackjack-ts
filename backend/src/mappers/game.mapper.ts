@@ -8,25 +8,37 @@ function mapCard(card: any): CardDTO {
   };
 }
 
-function mapPlayer(player: any, id: string): PlayerStateDTO {
-  const cards = player.hand?.cards ?? [];
+function mapPlayer(
+  player: any,
+  id: string,
+  options?: { hideSecondCard?: boolean }
+): PlayerStateDTO {
+  const cards = player.hand.cards.map(mapCard);
+
   return {
     id,
-    hand: cards.map(mapCard),
-    value: player.hand?.value ?? 0,
-    funds: player.funds ?? 0,
+    hand: options?.hideSecondCard
+      ? cards.slice(0, 1) // 👈 only first card visible
+      : cards,
+    value: options?.hideSecondCard ? 0 : player.hand.value,
+    funds: player.funds,
     status:
-      (player.hand?.value ?? 0) > 21
+      (options?.hideSecondCard ? 0 : player.hand.value) > 21
         ? 'bust'
         : 'playing',
   };
 }
 
+
 export function mapGameToState(game: Game, gameId: string): GameStateDTO {
+  const phase = 'player_turn'; // later this becomes dynamic
+
   return {
     gameId,
     player: mapPlayer(game.player, 'player'),
-    dealer: mapPlayer(game.dealer, 'dealer'),
-    phase: 'player_turn',
+    dealer: mapPlayer(game.dealer, 'dealer', {
+      hideSecondCard: phase === 'player_turn',
+    }),
+    phase,
   };
 }
