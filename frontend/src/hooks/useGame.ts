@@ -76,13 +76,19 @@ export function useGame() {
     try {
       const updatedGame = await apiHit(game.gameId);
       setGame(updatedGame);
-    } catch (err) {
-      console.error(err);
-      setError('Failed to hit');
+    } catch (err: any) {
+      console.warn('[useGame] hit rejected, game likely finished');
+
+      // Optional safety refresh (recommended)
+      try {
+        const refreshed = await getGameState(game.gameId);
+        setGame(refreshed);
+      } catch {}
     } finally {
       setLoading(false);
     }
   }, [game]);
+
 
   /**
    * Player stands (dealer plays).

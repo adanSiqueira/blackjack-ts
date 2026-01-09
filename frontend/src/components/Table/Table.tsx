@@ -10,6 +10,8 @@ type TableProps = {
 
 export function Table({ game, onHit, onStand }: TableProps) {
 
+  const actionsDisabled = game.phase !== 'player_turn';
+
   if (!game.player || !game.dealer) {
     return <div><p>Loading game...</p></div>;
   }
@@ -28,7 +30,7 @@ export function Table({ game, onHit, onStand }: TableProps) {
         value={game.player.value}
       />
 
-      <BetControls onHit={onHit} onStand={onStand} />
+      <BetControls onHit={onHit} onStand={onStand} disabled={actionsDisabled} />
     </div>
   );
 }
