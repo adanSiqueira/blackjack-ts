@@ -32,5 +32,8 @@ export class Game {
             return 'Dealer wins';
         return 'Push';
     }
+    isPlayerBust() {
+        return this.player.hand.value > 21;
+    }
 }
 //# sourceMappingURL=Game.js.map

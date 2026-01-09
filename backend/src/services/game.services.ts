@@ -48,19 +48,19 @@ export class GameService {
    * @param id Game session ID
    */
   hit(id: string): GameSession {
-    const session = this.getGame(id);
+  const session = this.getGame(id);
 
-    if (session.status !== 'active') {
-      throw new Error('Game already finished');
-    }
+  if (session.status !== 'active') {
+    throw new Error('Game already finished');
+  }
 
-    session.game.hitPlayer();
+  session.game.hitPlayer();
 
-    if (session.game.player.hand.value >= 21) {
-      session.status = 'finished';
-    }
+  if (session.game.isPlayerBust()) {
+    session.status = 'finished';
+  }
 
-    return session;
+  return session;
   }
 
   /**

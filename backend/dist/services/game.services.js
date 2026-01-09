@@ -48,7 +48,7 @@ class GameService {
             throw new Error('Game already finished');
         }
         session.game.hitPlayer();
-        if (session.game.player.hand.value >= 21) {
+        if (session.game.isPlayerBust()) {
             session.status = 'finished';
         }
         return session;

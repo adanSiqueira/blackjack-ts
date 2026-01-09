@@ -4,7 +4,7 @@ exports.mapGameToState = mapGameToState;
 function mapCard(card) {
     return {
         suit: card.suit,
-        rank: card.rank,
+        rank: card.value,
     };
 }
 function calculateVisibleValue(cards) {

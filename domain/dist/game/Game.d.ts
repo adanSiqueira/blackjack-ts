@@ -8,5 +8,6 @@ export declare class Game {
     hitPlayer(): void;
     stand(): void;
     getResult(): string;
+    isPlayerBust(): boolean;
 }
 //# sourceMappingURL=Game.d.ts.map

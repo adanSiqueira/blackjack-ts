@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.registerGameSocket = registerGameSocket;
 const game_store_1 = require("../state/game.store");
+const game_services_1 = require("../services/game.services");
 /**
  * Registers game-related WebSocket events
  *
@@ -30,43 +31,42 @@ function registerGameSocket(socket) {
                 }
                 case 'game:hit': {
                     const { gameId } = message.payload;
-                    const session = game_store_1.gameStore.getGame(gameId);
-                    if (!session) {
+                    try {
+                        const session = game_services_1.gameService.hit(gameId);
+                        socket.send(JSON.stringify({
+                            type: 'game:update',
+                            payload: {
+                                id: session.id,
+                                state: session.game
+                            }
+                        }));
+                    }
+                    catch (err) {
                         socket.send(JSON.stringify({
                             type: 'error',
-                            message: 'Game not found'
+                            message: err.message
                         }));
-                        return;
                     }
-                    session.game.hitPlayer();
-                    socket.send(JSON.stringify({
-                        type: 'game:update',
-                        payload: {
-                            id: session.id,
-                            state: session.game
-                        }
-                    }));
                     break;
                 }
                 case 'game:stand': {
                     const { gameId } = message.payload;
-                    const session = game_store_1.gameStore.getGame(gameId);
-                    if (!session) {
+                    try {
+                        const session = game_services_1.gameService.stand(gameId);
+                        socket.send(JSON.stringify({
+                            type: 'game:finished',
+                            payload: {
+                                id: session.id,
+                                result: session.game.getResult()
+                            }
+                        }));
+                    }
+                    catch (err) {
                         socket.send(JSON.stringify({
                             type: 'error',
-                            message: 'Game not found'
+                            message: err.message
                         }));
-                        return;
                     }
-                    session.game.stand();
-                    game_store_1.gameStore.finishGame(gameId);
-                    socket.send(JSON.stringify({
-                        type: 'game:finished',
-                        payload: {
-                            id: session.id,
-                            result: session.game.getResult()
-                        }
-                    }));
                     break;
                 }
                 default:

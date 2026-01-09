@@ -4,4 +4,5 @@ export * from './cards/Deck.js';
 export * from './cards/Hand.js';
 export * from './players/Player.js';
 export * from './players/Dealer.js';
+export * from './dto/index.js';
 //# sourceMappingURL=index.js.map

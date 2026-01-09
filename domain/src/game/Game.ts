@@ -36,4 +36,9 @@ export class Game {
     if (p < d) return 'Dealer wins';
     return 'Push';
   }
+  
+  isPlayerBust(): boolean {
+    return this.player.hand.value > 21;
+  }
+
 }

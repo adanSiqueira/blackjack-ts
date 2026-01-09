@@ -1,40 +1,39 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.GameController = void 0;
-const domain_1 = require("@blackjack/domain");
+const game_services_1 = require("../../services/game.services");
 const game_mapper_1 = require("../../mappers/game.mapper");
-const games = new Map();
 class GameController {
     static createGame(req, res) {
-        const game = new domain_1.Game();
-        const gameId = crypto.randomUUID();
-        game.start(100); // Starting with a default bet of 100
-        games.set(gameId, game);
-        const dto = (0, game_mapper_1.mapGameToState)(game, gameId);
-        res.json(dto); // ✅ THIS is what frontend expects
+        const session = game_services_1.gameService.createGame(100);
+        res.json((0, game_mapper_1.mapGameToState)(session.game, session.id));
     }
     static getGame(req, res) {
-        const game = games.get(req.params.id);
-        if (!game) {
-            return res.status(404).json({ error: 'Game not found' });
+        try {
+            const session = game_services_1.gameService.getGame(req.params.id);
+            res.json((0, game_mapper_1.mapGameToState)(session.game, session.id));
         }
-        res.json((0, game_mapper_1.mapGameToState)(game, req.params.id));
+        catch (err) {
+            res.status(404).json({ error: err.message });
+        }
     }
     static hit(req, res) {
-        const game = games.get(req.params.id);
-        if (!game) {
-            return res.status(404).json({ error: 'Game not found' });
+        try {
+            const session = game_services_1.gameService.hit(req.params.id);
+            res.json((0, game_mapper_1.mapGameToState)(session.game, session.id));
         }
-        game.hitPlayer();
-        res.json((0, game_mapper_1.mapGameToState)(game, req.params.id));
+        catch (err) {
+            res.status(400).json({ error: err.message });
+        }
     }
     static stand(req, res) {
-        const game = games.get(req.params.id);
-        if (!game) {
-            return res.status(404).json({ error: 'Game not found' });
+        try {
+            const session = game_services_1.gameService.stand(req.params.id);
+            res.json((0, game_mapper_1.mapGameToState)(session.game, session.id));
         }
-        game.stand();
-        res.json((0, game_mapper_1.mapGameToState)(game, req.params.id));
+        catch (err) {
+            res.status(400).json({ error: err.message });
+        }
     }
 }
 exports.GameController = GameController;

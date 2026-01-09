@@ -1,3 +1,3 @@
-export * from './Card.dto.ts';
-export * from './PlayerState.dto.ts';
-export * from './GameState.dto.ts';
+export * from './Card.dto.js';
+export * from './PlayerState.dto.js';
+export * from './GameState.dto.js';
