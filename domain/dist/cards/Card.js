@@ -1,8 +1,10 @@
 export class Card {
     value;
+    rank;
     suit;
-    constructor(value, suit) {
+    constructor(value, rank, suit) {
         this.value = value;
+        this.rank = rank;
         this.suit = suit;
     }
     toString() {

@@ -4,11 +4,25 @@ export class Deck {
   private cards: Card[] = [];
 
   constructor() {
-    const values = ['A','2','3','4','5','6','7','8','9','10','J','Q','K'];
-    const suits = ['♠ Spades', '♥ Hearts', '♦ Diamonds', '♣ Clubs'];
+    const ranks = [
+      'A','2','3','4','5','6','7','8','9','10','J','Q','K'
+    ] as const;
 
-    this.cards = values.flatMap(v =>
-      suits.map(s => new Card(v, s))
+    const suits = [
+      'hearts',
+      'diamonds',
+      'clubs',
+      'spades'
+    ] as const;
+
+    this.cards = ranks.flatMap(rank =>
+      suits.map(suit =>
+        new Card(
+          rank, // value (Blackjack logic)
+          rank, // rank (identity)
+          suit  // suit (normalized)
+        )
+      )
     );
 
     this.shuffle();

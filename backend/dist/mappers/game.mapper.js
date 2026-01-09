@@ -4,7 +4,7 @@ exports.mapGameToState = mapGameToState;
 function mapCard(card) {
     return {
         suit: card.suit,
-        rank: card.value,
+        rank: card.rank,
     };
 }
 function calculateVisibleValue(cards) {
@@ -32,8 +32,22 @@ function mapPlayer(player, id, options) {
             : 'playing',
     };
 }
-function mapGameToState(game, gameId) {
-    const phase = 'player_turn'; // later this becomes dynamic
+function mapResult(game) {
+    const p = game.player.hand.value;
+    const d = game.dealer.hand.value;
+    if (p > 21)
+        return 'lose';
+    if (d > 21)
+        return 'win';
+    if (p > d)
+        return 'win';
+    if (p < d)
+        return 'lose';
+    return 'push';
+}
+function mapGameToState(game, gameId, status) {
+    const playerBust = game.isPlayerBust();
+    const phase = status === 'finished' ? 'finished' : 'player_turn';
     return {
         gameId,
         player: mapPlayer(game.player, 'player'),
@@ -41,5 +55,6 @@ function mapGameToState(game, gameId) {
             hideSecondCard: phase === 'player_turn',
         }),
         phase,
+        result: phase === 'finished' ? mapResult(game) : undefined
     };
 }

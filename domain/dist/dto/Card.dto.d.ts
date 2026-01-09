@@ -3,5 +3,6 @@ export type Rank = 'A' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | '10' | 
 export type CardDTO = {
     suit: Suit;
     rank: Rank;
+    value?: Rank;
 };
 //# sourceMappingURL=Card.dto.d.ts.map

@@ -6,13 +6,13 @@ export class GameController {
   static createGame(req: Request, res: Response) {
     const session = gameService.createGame(100);
 
-    res.json(mapGameToState(session.game, session.id));
+    res.json(mapGameToState(session.game, session.id, session.status));
   }
 
   static getGame(req: Request, res: Response) {
     try {
       const session = gameService.getGame(req.params.id);
-      res.json(mapGameToState(session.game, session.id));
+      res.json(mapGameToState(session.game, session.id, session.status));
     } catch (err: any) {
       res.status(404).json({ error: err.message });
     }
@@ -21,7 +21,7 @@ export class GameController {
   static hit(req: Request, res: Response) {
     try {
       const session = gameService.hit(req.params.id);
-      res.json(mapGameToState(session.game, session.id));
+      res.json(mapGameToState(session.game, session.id, session.status));
     } catch (err: any) {
       res.status(400).json({ error: err.message });
     }
@@ -30,7 +30,7 @@ export class GameController {
   static stand(req: Request, res: Response) {
     try {
       const session = gameService.stand(req.params.id);
-      res.json(mapGameToState(session.game, session.id));
+      res.json(mapGameToState(session.game, session.id, session.status));
     } catch (err: any) {
       res.status(400).json({ error: err.message });
     }

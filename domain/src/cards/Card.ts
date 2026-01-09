@@ -1,6 +1,7 @@
 export class Card {
   constructor(
     public readonly value: string,
+    public readonly rank: string,
     public readonly suit: string
   ) {}
 

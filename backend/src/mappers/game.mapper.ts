@@ -4,7 +4,7 @@ import { Game } from '@blackjack/domain';
 function mapCard(card: any): CardDTO {
   return {
     suit: card.suit,
-    rank: card.value,
+    rank: card.rank,
   };
 }
 
@@ -42,9 +42,20 @@ function mapPlayer(
   };
 }
 
+function mapResult(game: Game): 'win' | 'lose' | 'push' {
+  const p = game.player.hand.value;
+  const d = game.dealer.hand.value;
 
-export function mapGameToState(game: Game, gameId: string): GameStateDTO {
-  const phase = 'player_turn'; // later this becomes dynamic
+  if (p > 21) return 'lose';
+  if (d > 21) return 'win';
+  if (p > d) return 'win';
+  if (p < d) return 'lose';
+  return 'push';
+}
+
+export function mapGameToState(game: Game, gameId: string, status: 'active'|'finished'): GameStateDTO {
+  const playerBust = game.isPlayerBust();
+  const phase = status === 'finished' ? 'finished' : 'player_turn';
 
   return {
     gameId,
@@ -53,5 +64,6 @@ export function mapGameToState(game: Game, gameId: string): GameStateDTO {
       hideSecondCard: phase === 'player_turn',
     }),
     phase,
+    result: phase === 'finished' ? mapResult(game) : undefined
   };
 }

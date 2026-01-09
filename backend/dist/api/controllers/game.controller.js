@@ -6,12 +6,12 @@ const game_mapper_1 = require("../../mappers/game.mapper");
 class GameController {
     static createGame(req, res) {
         const session = game_services_1.gameService.createGame(100);
-        res.json((0, game_mapper_1.mapGameToState)(session.game, session.id));
+        res.json((0, game_mapper_1.mapGameToState)(session.game, session.id, session.status));
     }
     static getGame(req, res) {
         try {
             const session = game_services_1.gameService.getGame(req.params.id);
-            res.json((0, game_mapper_1.mapGameToState)(session.game, session.id));
+            res.json((0, game_mapper_1.mapGameToState)(session.game, session.id, session.status));
         }
         catch (err) {
             res.status(404).json({ error: err.message });
@@ -20,7 +20,7 @@ class GameController {
     static hit(req, res) {
         try {
             const session = game_services_1.gameService.hit(req.params.id);
-            res.json((0, game_mapper_1.mapGameToState)(session.game, session.id));
+            res.json((0, game_mapper_1.mapGameToState)(session.game, session.id, session.status));
         }
         catch (err) {
             res.status(400).json({ error: err.message });
@@ -29,7 +29,7 @@ class GameController {
     static stand(req, res) {
         try {
             const session = game_services_1.gameService.stand(req.params.id);
-            res.json((0, game_mapper_1.mapGameToState)(session.game, session.id));
+            res.json((0, game_mapper_1.mapGameToState)(session.game, session.id, session.status));
         }
         catch (err) {
             res.status(400).json({ error: err.message });

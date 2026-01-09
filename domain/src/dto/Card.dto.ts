@@ -18,4 +18,5 @@ export type Rank =
 export type CardDTO = {
   suit: Suit;
   rank: Rank;
+  value?: Rank;
 };
