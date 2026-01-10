@@ -41,4 +41,8 @@ export class Game {
     return this.player.hand.value > 21;
   }
 
+  hasPlayerReached21(): boolean {
+    return this.player.hand.value === 21;
+  }
+
 }

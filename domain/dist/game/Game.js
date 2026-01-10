@@ -35,5 +35,8 @@ export class Game {
     isPlayerBust() {
         return this.player.hand.value > 21;
     }
+    hasPlayerReached21() {
+        return this.player.hand.value === 21;
+    }
 }
 //# sourceMappingURL=Game.js.map

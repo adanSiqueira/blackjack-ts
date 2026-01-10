@@ -53,17 +53,31 @@ function mapResult(game: Game): 'win' | 'lose' | 'push' {
   return 'push';
 }
 
-export function mapGameToState(game: Game, gameId: string, status: 'active'|'finished'): GameStateDTO {
+export function mapGameToState(
+  game: Game,
+  gameId: string,
+  status: 'active' | 'finished'
+): GameStateDTO {
+
   const playerBust = game.isPlayerBust();
-  const phase = status === 'finished' ? 'finished' : 'player_turn';
+  const playerHas21 = game.player.hand.value === 21;
+
+  const isFinished = status === 'finished' || playerBust || playerHas21;
+
+  const phase: GameStateDTO['phase'] =
+    isFinished ? 'finished' : 'player_turn';
 
   return {
     gameId,
+
     player: mapPlayer(game.player, 'player'),
+
     dealer: mapPlayer(game.dealer, 'dealer', {
-      hideSecondCard: phase === 'player_turn',
+      hideSecondCard: !isFinished,
     }),
+
     phase,
-    result: phase === 'finished' ? mapResult(game) : undefined
+
+    result: isFinished ? mapResult(game) : undefined
   };
 }

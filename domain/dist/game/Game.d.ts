@@ -9,5 +9,6 @@ export declare class Game {
     stand(): void;
     getResult(): string;
     isPlayerBust(): boolean;
+    hasPlayerReached21(): boolean;
 }
 //# sourceMappingURL=Game.d.ts.map

@@ -54,9 +54,13 @@ export class GameService {
     throw new Error('Game already finished');
   }
 
+  if (session.game.hasPlayerReached21()) {
+    throw new Error('Player already has 21');
+  }
+
   session.game.hitPlayer();
 
-  if (session.game.isPlayerBust()) {
+  if (session.game.isPlayerBust() || session.game.hasPlayerReached21()) {
     session.status = 'finished';
   }
 

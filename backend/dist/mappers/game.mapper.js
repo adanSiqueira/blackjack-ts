@@ -47,14 +47,16 @@ function mapResult(game) {
 }
 function mapGameToState(game, gameId, status) {
     const playerBust = game.isPlayerBust();
-    const phase = status === 'finished' ? 'finished' : 'player_turn';
+    const playerHas21 = game.player.hand.value === 21;
+    const isFinished = status === 'finished' || playerBust || playerHas21;
+    const phase = isFinished ? 'finished' : 'player_turn';
     return {
         gameId,
         player: mapPlayer(game.player, 'player'),
         dealer: mapPlayer(game.dealer, 'dealer', {
-            hideSecondCard: phase === 'player_turn',
+            hideSecondCard: !isFinished,
         }),
         phase,
-        result: phase === 'finished' ? mapResult(game) : undefined
+        result: isFinished ? mapResult(game) : undefined
     };
 }
