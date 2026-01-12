@@ -3,6 +3,13 @@ import type { CardDTO, GameStateDTO } from '@blackjack/domain';
 import { Hand } from '../Hand/Hand';
 import { BetControls } from '../BetControls/BetControls';
 
+type TableProps = {
+  game: GameStateDTO;
+  onHit: () => void;
+  onStand: () => void;
+  onDealerRevealComplete?: () => void;
+};
+
 function getGameMessage(game: GameStateDTO): string {
   if (game.phase === 'player_turn') {
     return 'Your turn';
@@ -61,13 +68,7 @@ function randomDelay() {
   );
 }
 
-type TableProps = {
-  game: GameStateDTO;
-  onHit: () => void;
-  onStand: () => void;
-};
-
-export function Table({ game, onHit, onStand }: TableProps) {
+export function Table({ game, onHit, onStand, onDealerRevealComplete }: TableProps) {
   const [visibleDealerCards, setVisibleDealerCards] = useState<CardDTO[]>([]);
   const [visiblePlayerCards, setVisiblePlayerCards] = useState<CardDTO[]>([]);
 
@@ -103,7 +104,6 @@ export function Table({ game, onHit, onStand }: TableProps) {
   */
 
   useEffect(() => {
-  // New game → reveal player's initial hand progressively
   if (game.player.hand.length === 2 && visiblePlayerCards.length === 0) {
     setIsPlayerRevealing(true);
     setVisiblePlayerCards([]);
@@ -115,7 +115,7 @@ export function Table({ game, onHit, onStand }: TableProps) {
         if (index === game.player.hand.length - 1) {
           setIsPlayerRevealing(false);
         }
-      }, 500 * index); // adjust delay if you want
+      }, 500 * index); 
     });
 
     return;
@@ -141,6 +141,7 @@ export function Table({ game, onHit, onStand }: TableProps) {
       // Player busted → reveal all dealer cards immediately
       setVisibleDealerCards(game.dealer.hand);
       setIsDealerRevealing(false);
+      onDealerRevealComplete?.();
       return;
     }
 
@@ -154,6 +155,7 @@ export function Table({ game, onHit, onStand }: TableProps) {
 
         if (index === game.dealer.hand.length - 1) {
           setIsDealerRevealing(false);
+          onDealerRevealComplete?.();
         }
       }, randomDelay() * index);
     });

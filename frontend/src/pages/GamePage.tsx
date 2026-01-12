@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useGame } from '../hooks/useGame';
 import { Table } from '../components/Table/Table';
@@ -8,9 +8,11 @@ export function GamePage() {
   const { id } = useParams<{ id: string }>();
   const { game, refreshGame, hit, stand, loading, error } = useGame();
   const navigate = useNavigate();
+  const [canPlayAgain, setCanPlayAgain] = useState(false);
 
   useEffect(() => {
     if (!id) return;
+    setCanPlayAgain(false);
     refreshGame(id);
   }, [id, refreshGame]);
 
@@ -34,9 +36,9 @@ export function GamePage() {
   return (
     <div>
       <h1>Blackjack</h1>
-      <Table game={game} onHit={hit} onStand={stand} />
+      <Table game={game} onHit={hit} onStand={stand} onDealerRevealComplete={() => setCanPlayAgain(true)}/>
 
-      {game.phase === 'finished' && (
+      {game.phase === 'finished' && canPlayAgain && (
         <div style={{ marginTop: '1.5rem', textAlign: 'center' }}>
           <button onClick={handlePlayAgain}>
             Play again
