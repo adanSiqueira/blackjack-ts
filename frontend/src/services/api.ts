@@ -32,6 +32,15 @@ export async function createGame(): Promise<GameStateDTO> {
   return response.data;
 }
 
+
+/**
+ * Get a Game by ID
+*/
+export async function getGame(gameId: string): Promise<GameStateDTO> {
+  const response = await apiClient.get<GameStateDTO>(`/game/${gameId}`);
+  return response.data;
+}
+
 /**
  * Fetches the current state of a game.
  */

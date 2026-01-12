@@ -47,22 +47,21 @@ export function useGame() {
    * Refreshes the game state from the backend.
    * Useful after reconnects or WS events later.
    */
-  const refreshGame = useCallback(async () => {
-    if (!game) return;
+  const refreshGame = useCallback(async (gameId: string) => {
+  setLoading(true);
+  setError(null);
 
-    setLoading(true);
-    setError(null);
+  try {
+    const updatedGame = await getGameState(gameId);
+    setGame(updatedGame);
+  } catch (err) {
+    console.error(err);
+    setError('Failed to fetch game state');
+  } finally {
+    setLoading(false);
+  }
+}, []);
 
-    try {
-      const updatedGame = await getGameState(game.gameId);
-      setGame(updatedGame);
-    } catch (err) {
-      console.error(err);
-      setError('Failed to fetch game state');
-    } finally {
-      setLoading(false);
-    }
-  }, [game]);
 
   /**
    * Player hits (draws a card).

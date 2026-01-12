@@ -1,13 +1,16 @@
 import { useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import { useGame } from '../hooks/useGame';
 import { Table } from '../components/Table/Table';
 
 export function GamePage() {
-  const { game, createGame, hit, stand, loading, error } = useGame();
+  const { id } = useParams<{ id: string }>();
+  const { game, refreshGame, hit, stand, loading, error } = useGame();
 
   useEffect(() => {
-    createGame();
-  }, [createGame]);
+    if (!id) return;
+    refreshGame(id);
+  }, [id, refreshGame]);
 
   if (loading && !game) {
     return <p>Loading game...</p>;
