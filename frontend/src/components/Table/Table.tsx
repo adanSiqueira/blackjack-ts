@@ -68,15 +68,20 @@ type TableProps = {
 };
 
 export function Table({ game, onHit, onStand }: TableProps) {
+  const [visibleDealerCards, setVisibleDealerCards] = useState<CardDTO[]>([]);
+  const [visiblePlayerCards, setVisiblePlayerCards] = useState<CardDTO[]>([]);
+
+  const [isDealerRevealing, setIsDealerRevealing] = useState(false);
+  const [isPlayerRevealing, setIsPlayerRevealing] = useState(false);
+
   const playerBust =
   game.phase === 'finished' && game.player.value > 21;
 
   const playerBlackjack =
   game.phase === 'finished' && game.player.value === 21;
 
-  const [isDealerRevealing, setIsDealerRevealing] = useState(false);
   const actionsDisabled = game.phase !== 'player_turn';
-  const [visibleDealerCards, setVisibleDealerCards] = useState<CardDTO[]>([]);
+  
   const visibleDealerValue = game.phase === 'finished' ? calculateHandValue(visibleDealerCards) : game.dealer.value;
   const message =
   game.phase === 'player_turn'
@@ -94,6 +99,36 @@ export function Table({ game, onHit, onStand }: TableProps) {
     return <div><p>Loading game...</p></div>;
   }
 
+  /** Use Effect to manage player's logic
+  */
+
+  useEffect(() => {
+  // New game → reveal player's initial hand progressively
+  if (game.player.hand.length === 2 && visiblePlayerCards.length === 0) {
+    setIsPlayerRevealing(true);
+    setVisiblePlayerCards([]);
+
+    game.player.hand.forEach((card, index) => {
+      setTimeout(() => {
+        setVisiblePlayerCards(prev => [...prev, card]);
+
+        if (index === game.player.hand.length - 1) {
+          setIsPlayerRevealing(false);
+        }
+      }, 500 * index); // adjust delay if you want
+    });
+
+    return;
+  }
+
+  // After initial reveal → keep in sync
+  if (!isPlayerRevealing) {
+    setVisiblePlayerCards(game.player.hand);
+  }
+}, [game.player.hand]);
+
+/** Use Effect to manage dealers's logic
+  */
   useEffect(() => {
     if (game.phase !== 'finished') {
       // During player turn: show only what's allowed
@@ -137,8 +172,8 @@ export function Table({ game, onHit, onStand }: TableProps) {
 
       <Hand
         label="Player"
-        cards={game.player.hand}
-        value={game.player.value}
+        cards={visiblePlayerCards}
+        value={calculateHandValue(visiblePlayerCards)}
       />
 
       <BetControls onHit={onHit} onStand={onStand} disabled={actionsDisabled} />
