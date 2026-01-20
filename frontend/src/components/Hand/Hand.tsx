@@ -1,4 +1,4 @@
-import { Card } from '../Card/Card';
+import { Card } from '../Card';
 import type { CardDTO as CardType } from '@blackjack/domain';
 
 type HandProps = {
