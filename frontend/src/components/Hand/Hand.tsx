@@ -1,4 +1,4 @@
-import { Card } from '../Card/Card.tsx';
+import { Card } from '../Card/Card';
 import type { CardDTO as CardType } from '@blackjack/domain';
 
 type HandProps = {
