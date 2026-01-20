@@ -6,6 +6,6 @@ export class Card {
   ) {}
 
   toString(): string {
-    return `${this.value} ${this.suit}`;
+    return `${this.value}-${this.suit}`;
   }
 }

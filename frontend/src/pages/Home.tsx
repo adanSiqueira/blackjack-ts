@@ -10,8 +10,8 @@ export function Home() {
   };
 
   return (
-    <div style={{ textAlign: 'center', marginTop: '4rem' }}>
-      <h1>Blackjack</h1>
+    <div className="home-main-div">
+      <h1 className="home-title">Blackjack</h1>
       <button onClick={startGame}>Start Game</button>
     </div>
   );

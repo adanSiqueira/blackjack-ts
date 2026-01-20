@@ -1,0 +1,39 @@
+body {
+    background-image: url('./src/assets/table-background.jpg');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    min-height: 100vh;
+    align-items: center;
+}
+
+.home-main-div{
+    text-align: center;
+    margin-top: 4rem;
+}
+
+.home-title{
+    font-family: 'Orbitron', sans-serif;
+    font-size: 4rem;
+    font-weight: bold;
+    font-family: monospace;
+    text-align: center;
+    text-shadow: hsla(0, 0, 0, 0.75)
+}
+
+.card {
+  width: 80px;
+  height: auto;
+  border-radius: 10px;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.35);
+  transition: transform 0.25s ease;
+}
+
+.card:hover {
+  transform: translateY(-6px);
+}
+
