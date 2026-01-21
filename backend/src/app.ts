@@ -33,7 +33,7 @@ const frontendDistPath = path.resolve(
 app.use(express.static(frontendDistPath));
 
 // SPA fallback (React Router)
-app.get('/*', (_req, res) => {
+app.get('./*', (_req, res) => {
   res.sendFile(path.join(frontendDistPath, 'index.html'));
 });
 
