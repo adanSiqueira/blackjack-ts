@@ -19,7 +19,7 @@
 
 ---
 
-## 📌 Project Overview
+##  Project Overview
 
 **Blackjack-ts** is a **web implementation of the Blackjack card game**, designed not just as a playable game, but as a **software architecture showcase**.
 
@@ -50,6 +50,46 @@ root
 ├── backend     → HTTP API + WebSocket server
 ├── frontend    → React UI (Vite)
 
+```
+
+```text
+┌─────────────────────────┐
+│        Frontend         │
+│  React + TypeScript     │
+│  (Vite)                 │
+│                         │
+│  - UI Components        │
+│  - Custom Hooks         │
+│  - WebSocket Client     │
+│  - REST Client          │
+└───────────┬─────────────┘
+            │
+   HTTP API │        WebSocket
+            │
+┌───────────▼─────────────┐
+│         Backend         │
+│  Node.js + TypeScript   │
+│  Express + WS           │
+│                         │
+│  - Controllers          │
+│  - Routes               │
+│  - WebSocket Server     │
+│  - Game State Store     │
+└───────────┬─────────────┘
+            │
+            │ Calls domain logic
+            │
+┌───────────▼─────────────┐
+│          Domain         │
+│   Pure TypeScript       │
+│                         │
+│  - Cards / Deck         │
+│  - Players / Dealer     │
+│  - Game Rules           │
+│  - Hand Evaluation      │
+│                         │
+│  (Framework-agnostic)   │
+└─────────────────────────┘
 ```
 
 ### Why this structure?
@@ -125,6 +165,153 @@ The UI is intentionally simple for now, with plans for further polish and animat
 
 ---
 
+## Technical Decisions 
+
+### 1️⃣ Full TypeScript Across the Stack
+
+**Decision:**
+Use TypeScript in **domain, backend, and frontend**.
+
+**Why:**
+
+* End-to-end type safety
+* Shared mental model across layers
+* Fewer runtime errors
+* Better refactoring and scalability
+
+**Trade-off:**
+Slightly higher upfront complexity, but worth it for maintainability.
+
+---
+
+### 2️⃣ Domain-First Architecture (Framework-Agnostic Core)
+
+**Decision:**
+Extract all game rules into a standalone `/domain` package.
+
+**Why:**
+
+* Business rules are the most valuable part of the system
+* Domain logic should not depend on frameworks
+* Enables reuse across:
+
+  * CLI
+  * Backend
+  * Tests
+  * Future services
+
+**Result:**
+The backend becomes an **orchestrator**, not a rule holder.
+
+---
+
+### 3️⃣ Backend as the Authoritative Game State
+
+**Decision:**
+Store and manage game state exclusively on the server.
+
+**Why:**
+
+* Prevents client-side cheating
+* Enables real multiplayer in the future
+* Simplifies synchronization logic
+* Matches real-world multiplayer game architecture
+
+**Alternative considered:**
+Client-side state with validation — rejected due to consistency and security concerns.
+
+---
+
+### 4️⃣ WebSockets for Real-Time Gameplay
+
+**Decision:**
+Use WebSockets instead of polling or HTTP-only updates.
+
+**Why:**
+
+* Blackjack is event-driven
+* Immediate feedback improves UX
+* Scales naturally to multiplayer tables
+* Matches real-time system design patterns
+
+**Usage:**
+
+* Player actions → server
+* State updates → broadcast to client(s)
+
+---
+
+### 5️⃣ REST + WebSockets (Hybrid Communication)
+
+**Decision:**
+Use both REST and WebSockets instead of only one.
+
+**Why:**
+
+* REST is ideal for:
+
+  * Health checks
+  * Game initialization
+  * Stateless operations
+* WebSockets are ideal for:
+
+  * Continuous game updates
+  * Real-time interaction
+
+This avoids forcing one protocol to do everything.
+
+---
+
+### 6️⃣ Explicit HTTP Server Creation
+
+**Decision:**
+Create the HTTP server manually instead of relying on `app.listen()`.
+
+```ts
+const server = http.createServer(app);
+initGameSocket(server);
+```
+
+**Why:**
+
+* Required for clean WebSocket integration
+* Enables future protocol-level configuration
+* Aligns with production Node.js patterns
+
+---
+
+### 7️⃣ Environment-Based Configuration (Vite + Render)
+
+**Decision:**
+Use environment variables for API and WebSocket URLs.
+
+**Why:**
+
+* Clean separation between local and production environments
+* No hardcoded URLs
+* Avoids common deployment pitfalls
+
+This decision directly solved the production bug encountered during deployment.
+
+---
+
+### 8️⃣ Single Deployment, Multiple Concerns
+
+**Decision:**
+Deploy frontend and backend under the same public domain on Render.
+
+**Why:**
+
+* Simplifies CORS
+* Simplifies WebSocket configuration
+* Reduces operational overhead
+* Ideal for small-to-medium applications
+
+**Scales later to:**
+Separate services, Docker, or microservices if needed.
+
+---
+
 ## Environment Variables & Configuration
 
 The project uses **environment variables** to correctly separate local development and production environments.
@@ -160,7 +347,7 @@ The application is deployed on **Render** as a **full-stack service**.
 
 ---
 
-## ▶Running Locally
+## ▶ Running Locally
 
 ### Prerequisites
 
