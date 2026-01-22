@@ -7,7 +7,7 @@ type CardProps = {
 export function Card({ card }: CardProps) {
   return (
     <img
-      src={`/cards/${card.rank}-${card.suit}.png`}
+      src={`/cards/${card.rank}-${card.suit}.webp`}
       alt={`${card.rank}${card.suit}`}
       className="card"
     />
